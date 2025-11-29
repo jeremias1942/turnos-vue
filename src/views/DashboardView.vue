@@ -4,9 +4,8 @@
 
     <p>Sesión iniciada correctamente.</p>
 
-    <h2>Datos del usuario:</h2>
+    <h2>Bienvenido {{ user?.displayName }} </h2>
     <ul>
-      <li><strong>Nombre:</strong> {{ user?.displayName }}</li>
       <li><strong>Correo electrónico:</strong> {{ user?.email }}</li>
       <li><strong>Identificador de usuario:</strong> {{ user?.uid }}</li>
     </ul>

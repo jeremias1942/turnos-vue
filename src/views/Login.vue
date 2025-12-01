@@ -1,41 +1,30 @@
-<script setup>
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "../firebase";
-import { useRouter } from "vue-router";
+<template>
+  <div class="d-flex flex-column align-items-center justify-content-center vh-100 bg-light">
+    <div class="bg-white p-4 rounded shadow text-center" style="width: 350px;">
+      <h1 class="h4 mb-4">Iniciar sesión</h1>
 
-const router = useRouter();
+      <button @click="login" class="btn btn-danger w-100">
+        Ingresar con Google
+      </button>
+    </div>
+  </div>
+</template>
 
-const loginGoogle = async () => {
-  try {
-    const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+<script>
+import { loginWithGoogle } from "../firebase";
 
-    // Redirige al Dashboard después de iniciar sesión
-    router.push("/dashboard");
-  } catch (error) {
-    console.error("Error al iniciar sesión:", error);
-    alert("Hubo un error con Google Login.");
+export default {
+  name: "Login",
+  methods: {
+    async login() {
+      try {
+        await loginWithGoogle();
+        this.$router.push("/home");
+      } catch (error) {
+        console.error("Error en login", error);
+        alert("No se pudo iniciar sesión");
+      }
+    }
   }
 };
 </script>
-
-<template>
-  <div style="padding: 20px; text-align: center">
-    <h1>Iniciar Sesión</h1>
-
-    <button
-      @click="loginGoogle"
-      style="
-        padding: 10px 20px;
-        background: #4285f4;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 16px;
-      "
-    >
-      Iniciar con Google
-    </button>
-  </div>
-</template>

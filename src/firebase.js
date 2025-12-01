@@ -1,7 +1,9 @@
-import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+// 🔥 Firebase Login Definitivo
 
+import { initializeApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+
+// ⚠️ PONÉ TU CONFIG ACA
 const firebaseConfig = {
   apiKey: "AIzaSyCIy3N_XoZO_5S7ZRaaxogSt3svwvk3MkE",
   authDomain: "turnos-2d4c2.firebaseapp.com",
@@ -11,13 +13,25 @@ const firebaseConfig = {
   appId: "1:856314969812:web:8345f82c3f13964d000541"
 };
 
-const app = initializeApp(firebaseConfig)
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
-export const auth = getAuth(app)
-export const provider = new GoogleAuthProvider()
-export const db = getFirestore(app)
+export async function loginWithGoogle() {
+  const result = await signInWithPopup(auth, provider);
+  const user = result.user;
 
-// Función de login con Google
-export const loginWithGoogle = () => {
-  return signInWithPopup(auth, provider)
+  // 👉 GUARDAR USUARIO PARA EL ROUTER
+  localStorage.setItem("user", JSON.stringify({
+    uid: user.uid,
+    email: user.email,
+    name: user.displayName,
+    photo: user.photoURL,
+  }));
+
+  return user;
+}
+
+export function logout() {
+  localStorage.removeItem("user");
 }
